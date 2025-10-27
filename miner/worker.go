@@ -21,6 +21,7 @@ import (
 	"errors"
 	"fmt"
 	"math/big"
+	"runtime"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -1632,8 +1633,15 @@ func (w *worker) commitWork(interrupt *atomic.Int32, noempty bool, timestamp int
 // createInterruptTimer creates and starts a timer based on the header's timestamp for block building
 // and toggles the flag when the timer expires.
 func createInterruptTimer(number uint64, actualTimestamp time.Time, interruptBlockBuilding *atomic.Bool) func() {
-	delay := time.Until(actualTimestamp)
+	pc, file, line, ok := runtime.Caller(1) // 0 = this function, 1 = its caller
+	callerName := "unknown"
+	if ok {
+		if fn := runtime.FuncForPC(pc); fn != nil {
+			callerName = fn.Name()
+		}
+	}
 
+	delay := time.Until(actualTimestamp)
 	// Reduce the timeout by 500ms to give some buffer for state root computation
 	if delay > 1*time.Second {
 		delay -= 500 * time.Millisecond
@@ -1653,7 +1661,11 @@ func createInterruptTimer(number uint64, actualTimestamp time.Time, interruptBlo
 		interruptBlockBuilding.Store(true)
 
 		if interruptCtx.Err() != context.Canceled {
-			log.Info("Block building interrupted due to timeout", "block", number)
+			log.Info("Block building interrupted due to timeout",
+				"block", number,
+				"calledBy", callerName,
+				"callerLoc", fmt.Sprintf("%s:%d", file, line),
+			)
 			cancel()
 		}
 	}()
