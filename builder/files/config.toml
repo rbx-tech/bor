@@ -5,7 +5,7 @@ chain = "mainnet" # Set it to `amoy` for testnet
 # identity = "Annon-Identity"
 # verbosity = 3
 # vmdebug = false
-datadir = "/var/lib/bor/data"
+datadir = "/home/hoangbui/Code/bsc/bor/build/data"
 # ancient = ""
 # "db.engine" = "pebble"
 # "state.scheme" = "path"
@@ -81,7 +81,7 @@ syncmode = "full"
   # commitinterrupt = true
 
 
-# [jsonrpc]
+ [jsonrpc]
 #   ipcdisable = false
 #   ipcpath = ""
 #   gascap = 50000000
@@ -89,13 +89,13 @@ syncmode = "full"
 #   txfeecap = 5.0
 #   allow-unprotected-txs = false
 #   enabledeprecatedpersonal = false
-#   [jsonrpc.http]
-#     enabled = false
-#     port = 8545
+   [jsonrpc.http]
+     enabled = true
+     port = 8545
 #     prefix = ""
-#     host = "localhost"
-#     api = ["eth", "net", "web3", "txpool", "bor"]
-#     vhosts = ["*"]
+     host = "localhost"
+     api = ["eth", "net", "web3", "txpool", "bor"]
+     vhosts = ["*"]
 #     corsdomain = ["*"]
 #     ep-size = 40
 #     ep-requesttimeout = "0s"
