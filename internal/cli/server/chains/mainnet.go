@@ -30,6 +30,18 @@ var mainnetBor = &Chain{
 			ShanghaiBlock:       big.NewInt(50523000),
 			CancunBlock:         big.NewInt(54876000),
 			PragueBlock:         big.NewInt(73440256),
+			BlobScheduleConfig: &params.BlobScheduleConfig{
+				Cancun: &params.BlobConfig{
+					Target:         3,
+					Max:            6,
+					UpdateFraction: 3338477,
+				},
+				Prague: &params.BlobConfig{
+					Target:         3,
+					Max:            6,
+					UpdateFraction: 5007716,
+				},
+			},
 			Bor: &params.BorConfig{
 				JaipurBlock:    big.NewInt(23850000),
 				DelhiBlock:     big.NewInt(38189056),

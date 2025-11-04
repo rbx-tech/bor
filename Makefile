@@ -30,6 +30,12 @@ bor:
 	cp $(GOBIN)/bor $(GOPATH)/bin/
 	@echo "Done building."
 
+bor-static:
+	mkdir -p $(GOPATH)/bin/
+	go build -tags netgo -o $(GOBIN)/bor -ldflags "-s -w -extldflags '-static' -X ${PACKAGE}/params.GitCommit=${GIT_COMMIT}" ./cmd/cli/main.go
+	cp $(GOBIN)/bor $(GOPATH)/bin/
+	@echo "Done static building."
+
 protoc:
 	protoc --go_out=. --go-grpc_out=. ./internal/cli/server/proto/*.proto
 
